@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1087386016495",
+    "project_id": "citylights-auth",
+    "storage_bucket": "citylights-auth.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087386016495:android:39566b523f5c8f5d4b591a",
+        "android_client_info": {
+          "package_name": "com.citylights.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1orvhn-ZfsFnh0N3TxH_cjsW9hf7cViA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
