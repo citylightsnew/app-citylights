@@ -207,13 +207,8 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                 return _ModuleCard(
                   module: module,
                   onTap: () {
-                    // Navegar al módulo
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Navegando a ${module.title}'),
-                        duration: const Duration(seconds: 1),
-                      ),
-                    );
+                    // Navegar al módulo usando la ruta nombrada
+                    Navigator.pushNamed(context, module.route);
                   },
                 );
               }, childCount: _modules.length),
