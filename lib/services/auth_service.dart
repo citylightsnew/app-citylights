@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
-import 'api_service.dart';
+import 'package:dio/dio.dart';
+import 'dio_client.dart';
+import '../models/models.dart';
 
 class AuthService {
+  final DioClient _client = DioClient();
+
   // Instancia del secure storage
   static const _secureStorage = FlutterSecureStorage(
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
@@ -19,6 +23,89 @@ class AuthService {
   static const String _keyIsLoggedIn = 'is_logged_in';
 
   static final LocalAuthentication _localAuth = LocalAuthentication();
+
+  // ============================================
+  // NUEVOS MÉTODOS CON DIO
+  // ============================================
+
+  Future<LoginResponse> login(String email, String password) async {
+    try {
+      final response = await _client.post(
+        '/api/auth/login',
+        data: {'email': email, 'password': password},
+      );
+      return LoginResponse.fromJson(response.data);
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
+  Future<TwoFactorResponse> verify2FA(String email, String code) async {
+    try {
+      final response = await _client.post(
+        '/api/auth/verify-2fa',
+        data: {'email': email, 'code': code},
+      );
+      return TwoFactorResponse.fromJson(response.data);
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
+  Future<RegisterResponse> register({
+    required String name,
+    required String email,
+    required String password,
+    required String telephone,
+  }) async {
+    try {
+      final response = await _client.post(
+        '/api/auth/register',
+        data: {
+          'name': name,
+          'email': email,
+          'password': password,
+          'telephone': telephone,
+        },
+      );
+      return RegisterResponse.fromJson(response.data);
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
+  Future<VerifyEmailResponse> verifyEmail(String email, String code) async {
+    try {
+      final response = await _client.post(
+        '/api/auth/verify-email',
+        data: {'email': email, 'code': code},
+      );
+      return VerifyEmailResponse.fromJson(response.data);
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
+  Future<void> resendCode(String email) async {
+    try {
+      await _client.post('/api/auth/resend-code', data: {'email': email});
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
+  Future<User> getCurrentUser() async {
+    try {
+      final response = await _client.get('/api/auth/me');
+      return User.fromJson(response.data);
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
+  // ============================================
+  // MÉTODOS DE BIOMETRÍA
+  // ============================================
 
   static Future<bool> isBiometricsAvailable() async {
     try {
@@ -57,10 +144,6 @@ class AuthService {
 
       final bool didAuthenticate = await _localAuth.authenticate(
         localizedReason: 'Usa tu huella dactilar para acceder a City Lights',
-        options: const AuthenticationOptions(
-          biometricOnly: false,
-          stickyAuth: true,
-        ),
       );
 
       return didAuthenticate;
@@ -77,24 +160,13 @@ class AuthService {
     try {
       await _secureStorage.write(key: _keyAccessToken, value: accessToken);
 
-      final userData = {
-        'id': user.id,
-        'name': user.name,
-        'email': user.email,
-        'roleName': user.roleName,
-      };
+      final userData = jsonEncode(user.toJson());
 
-      await _secureStorage.write(
-        key: _keyUserData,
-        value: jsonEncode(userData),
-      );
+      await _secureStorage.write(key: _keyUserData, value: userData);
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(_keyIsLoggedIn, true);
       await prefs.setBool(_keyBiometricsEnabled, enableBiometrics);
-
-      await set2FASetup(user.twoFactorEnabled);
-
     } catch (e) {
       print('❌ Error saving session: $e');
     }
@@ -116,11 +188,11 @@ class AuthService {
 
       if (accessToken == null || userDataString == null) return null;
 
-      final userData = Map<String, String>.from(jsonDecode(userDataString));
+      final userData = jsonDecode(userDataString);
 
       return {
         'accessToken': accessToken,
-        'user': userData,
+        'user': User.fromJson(userData),
         'biometricsEnabled': prefs.getBool(_keyBiometricsEnabled) ?? false,
       };
     } catch (e) {

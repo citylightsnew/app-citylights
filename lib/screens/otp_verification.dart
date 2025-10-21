@@ -3,20 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../components/custom_button.dart';
 import '../components/notification_helper.dart';
-import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import '../services/dio_client.dart';
+import '../models/auth_model.dart';
 import 'dashboard.dart';
 import 'login.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
-  final bool usePushNotification;
 
-  const OtpVerificationScreen({
-    super.key,
-    required this.email,
-    this.usePushNotification = false,
-  });
+  const OtpVerificationScreen({super.key, required this.email});
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -28,6 +24,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     (index) => TextEditingController(),
   );
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
+  final _authService = AuthService();
   bool _isLoading = false;
   bool _canResend = false;
   int _countdown = 900; // 15 minutos = 900 segundos
@@ -121,7 +118,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     });
 
     try {
-      final verifyResponse = await ApiService.verify2FA(widget.email, otp);
+      final verifyResponse = await _authService.verify2FA(widget.email, otp);
 
       if (!mounted) return;
       setState(() {
@@ -409,18 +406,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
-                                widget.usePushNotification
-                                    ? Icons.notifications_active
-                                    : Icons.email,
-                                color: Colors.purple,
-                                size: 20,
-                              ),
+                              Icon(Icons.email, color: Colors.purple, size: 20),
                               const SizedBox(width: 8),
                               Text(
-                                widget.usePushNotification
-                                    ? 'Notificación enviada'
-                                    : 'Código enviado a',
+                                'Código enviado a',
                                 style: TextStyle(
                                   fontSize: size.width * 0.032,
                                   color: Colors.white.withOpacity(0.7),
@@ -432,9 +421,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            widget.usePushNotification
-                                ? 'Revisa tu dispositivo registrado'
-                                : widget.email,
+                            widget.email,
                             style: TextStyle(
                               fontSize: size.width * 0.035,
                               fontWeight: FontWeight.w400,

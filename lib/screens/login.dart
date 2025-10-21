@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../components/custom_text_field.dart';
 import '../components/custom_button.dart';
 import '../components/notification_helper.dart';
-import '../services/api_service.dart';
+import '../services/auth_service.dart';
+import '../services/dio_client.dart';
 import 'otp_verification.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _authService = AuthService();
   bool _isPasswordVisible = false;
   bool _isLoading = false;
 
@@ -65,30 +67,24 @@ class _LoginScreenState extends State<LoginScreen> {
       final password = _passwordController.text.trim();
 
       // Llamada real a la API
-      final loginResponse = await ApiService.login(email, password);
+      final loginResponse = await _authService.login(email, password);
 
       if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
 
-      if (loginResponse.requiresTwoFactor) {
-        NotificationHelper.showSuccess(context, loginResponse.message);
+      // La respuesta siempre requiere 2FA según el backend
+      NotificationHelper.showSuccess(
+        context,
+        loginResponse.message ?? 'Código enviado',
+      );
 
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => OtpVerificationScreen(
-              email: email,
-              usePushNotification: loginResponse.usePushNotification,
-            ),
-          ),
-        );
-      } else {
-        NotificationHelper.showError(
-          context,
-          'Error inesperado. Contacta al administrador.',
-        );
-      }
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => OtpVerificationScreen(email: email),
+        ),
+      );
     } catch (e) {
       if (!mounted) return;
       setState(() {

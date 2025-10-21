@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../config/app_config.dart';
+import '../models/models.dart';
+import 'dio_client.dart';
 
 class ApiService {
   // URL base desde la configuración
@@ -191,95 +193,5 @@ class ApiService {
         statusCode: 0,
       );
     }
-  }
-}
-
-// Modelos de respuesta
-class LoginResponse {
-  final String message;
-  final bool requiresTwoFactor;
-  final bool usePushNotification;
-
-  LoginResponse({
-    required this.message,
-    required this.requiresTwoFactor,
-    this.usePushNotification = false,
-  });
-
-  factory LoginResponse.fromJson(Map<String, dynamic> json) {
-    return LoginResponse(
-      message: json['message'] ?? '',
-      requiresTwoFactor: json['requiresTwoFactor'] ?? false,
-      usePushNotification: json['usePushNotification'] ?? false,
-    );
-  }
-}
-
-class TwoFactorResponse {
-  final User user;
-  final String accessToken;
-
-  TwoFactorResponse({required this.user, required this.accessToken});
-
-  factory TwoFactorResponse.fromJson(Map<String, dynamic> json) {
-    return TwoFactorResponse(
-      user: User.fromJson(json['user'] ?? {}),
-      accessToken: json['access_token'] ?? '',
-    );
-  }
-}
-
-class User {
-  final String id;
-  final String name;
-  final String email;
-  final String roleName;
-  final bool twoFactorEnabled;
-
-  User({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.roleName,
-    this.twoFactorEnabled = false,
-  });
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      roleName: json['roleName'] ?? json['role'] ?? '',
-      twoFactorEnabled: json['twoFactorEnabled'] ?? false,
-    );
-  }
-}
-
-class UserRole {
-  final String id;
-  final String name;
-  final String description;
-
-  UserRole({required this.id, required this.name, required this.description});
-
-  factory UserRole.fromJson(Map<String, dynamic> json) {
-    return UserRole(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-    );
-  }
-}
-
-// Excepción personalizada para errores de API
-class ApiException implements Exception {
-  final String message;
-  final int statusCode;
-
-  ApiException({required this.message, required this.statusCode});
-
-  @override
-  String toString() {
-    return 'ApiException: $message (Status: $statusCode)';
   }
 }
