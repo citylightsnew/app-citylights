@@ -3,6 +3,7 @@ import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../services/firebase_service.dart';
 import '../components/notification_helper.dart';
+import '../models/user_model.dart';
 import '../screens/dashboard.dart';
 
 class TwoFactorApprovalScreen extends StatefulWidget {
@@ -52,11 +53,31 @@ class _TwoFactorApprovalScreenState extends State<TwoFactorApprovalScreen> {
               id: userData['id'] as String,
               name: userData['name'] as String? ?? '',
               email: userData['email'] as String,
-              roleName: userData['roleName'] as String,
-              twoFactorEnabled: userData['twoFactorEnabled'] as bool? ?? true,
+              telephone: userData['telephone'] as String? ?? '',
+              roleId:
+                  userData['roleId'] as String? ??
+                  userData['role_id'] as String? ??
+                  '',
+              createdAt:
+                  DateTime.tryParse(
+                    userData['createdAt'] as String? ??
+                        userData['created_at'] as String? ??
+                        '',
+                  ) ??
+                  DateTime.now(),
+              updatedAt:
+                  DateTime.tryParse(
+                    userData['updatedAt'] as String? ??
+                        userData['updated_at'] as String? ??
+                        '',
+                  ) ??
+                  DateTime.now(),
+              twoFactorEnabled:
+                  userData['twoFactorEnabled'] as bool? ??
+                  userData['two_factor_enabled'] as bool? ??
+                  true,
             ),
-            enableBiometrics:
-                false, 
+            enableBiometrics: false,
           );
         }
 

@@ -9,7 +9,7 @@ void main() async {
   try {
     await FirebaseService.initialize();
   } catch (e) {
-    print('⚠️ Error inicializando Firebase: $e');
+    print('Error inicializando Firebase: $e');
   }
 
   runApp(const MyApp());
