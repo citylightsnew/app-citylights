@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 import '../components/notification_helper.dart';
-import 'dashboard.dart';
+import '../providers/auth_provider.dart';
 import 'login.dart';
 
 class BiometricAuthScreen extends StatefulWidget {
@@ -63,13 +64,11 @@ class _BiometricAuthScreenState extends State<BiometricAuthScreen>
       final bool authenticated = await AuthService.authenticateWithBiometrics();
 
       if (authenticated && mounted) {
-        final userData = widget.sessionData['user'] as Map<String, String>;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) =>
-                DashboardScreen(userName: userData['name'] ?? 'Usuario'),
-          ),
-        );
+        // Cargar los datos del usuario en el Provider
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+        await authProvider.loadStoredAuth();
+
+        Navigator.of(context).pushReplacementNamed('/dashboard');
       } else if (mounted) {
         setState(() {
           _isAuthenticating = false;
@@ -198,30 +197,30 @@ class _BiometricAuthScreenState extends State<BiometricAuthScreen>
                       width: 45,
                       height: 45,
                       child: Image.asset(
-                              'assets/images/logo.png',
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) {
-                                // Fallback en caso de error con la imagen
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        Colors.blue.withOpacity(0.8),
-                                        Colors.purple.withOpacity(0.8),
-                                      ],
-                                    ),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: const Icon(
-                                    Icons.lightbulb_outlined,
-                                    color: Colors.white,
-                                    size: 60,
-                                  ),
-                                );
-                              },
+                        'assets/images/logo.png',
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          // Fallback en caso de error con la imagen
+                          return Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.blue.withOpacity(0.8),
+                                  Colors.purple.withOpacity(0.8),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(15),
                             ),
+                            child: const Icon(
+                              Icons.lightbulb_outlined,
+                              color: Colors.white,
+                              size: 60,
+                            ),
+                          );
+                        },
+                      ),
                     ),
 
                     // Botón logout

@@ -19,10 +19,10 @@ class AuthProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
 
   AuthProvider() {
-    _loadStoredAuth();
+    loadStoredAuth();
   }
 
-  Future<void> _loadStoredAuth() async {
+  Future<void> loadStoredAuth() async {
     try {
       final token = await _storage.read(key: 'auth_token');
       final userData = await _storage.read(key: 'user_data');

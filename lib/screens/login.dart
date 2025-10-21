@@ -256,115 +256,131 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
+                  // Hacemos que la tarjeta de login sea scrolleable para pantallas pequeñas
                   Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.all(24),
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF1F1F1F),
-                            Color(0xFF171717),
-                            Color(0xFF0F0F0F),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.1),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            spreadRadius: 0,
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Acceso al Edificio',
-                              style: TextStyle(
-                                fontSize: size.width * 0.055,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.white,
-                                letterSpacing: 1,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return SingleChildScrollView(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: constraints.maxHeight,
+                            ),
+                            child: Container(
+                              margin: const EdgeInsets.all(24),
+                              padding: const EdgeInsets.all(24),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Color(0xFF1F1F1F),
+                                    Color(0xFF171717),
+                                    Color(0xFF0F0F0F),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.1),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.5),
+                                    spreadRadius: 0,
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 10),
+                                  ),
+                                ],
                               ),
-                            ),
-
-                            SizedBox(height: size.height * 0.04),
-
-                            CustomTextField(
-                              label: 'Email',
-                              hint: 'tu@email.com',
-                              controller: _emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              prefixIcon: Icons.email_outlined,
-                              validator: _validateEmail,
-                            ),
-
-                            const SizedBox(height: 20),
-
-                            CustomTextField(
-                              label: 'Contraseña',
-                              hint: 'Tu contraseña',
-                              controller: _passwordController,
-                              obscureText: !_isPasswordVisible,
-                              prefixIcon: Icons.lock_outline,
-                              suffixIcon: _isPasswordVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              onSuffixIconTap: () {
-                                setState(() {
-                                  _isPasswordVisible = !_isPasswordVisible;
-                                });
-                              },
-                              validator: _validatePassword,
-                            ),
-
-                            const SizedBox(height: 30),
-
-                            CustomButton(
-                              text: 'Acceder al Sistema',
-                              isLoading: _isLoading,
-                              onPressed: _handleLogin,
-                            ),
-
-                            const SizedBox(height: 20),
-
-                            Center(
-                              child: TextButton(
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: const Text(
-                                        'Contacte al administrador del edificio',
-                                      ),
-                                      backgroundColor: Colors.white.withOpacity(
-                                        0.1,
+                              child: Form(
+                                key: _formKey,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Acceso al Edificio',
+                                      style: TextStyle(
+                                        fontSize: size.width * 0.055,
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.white,
+                                        letterSpacing: 1,
                                       ),
                                     ),
-                                  );
-                                },
-                                child: Text(
-                                  '¿Problemas de acceso?',
-                                  style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7),
-                                    fontWeight: FontWeight.w300,
-                                  ),
+
+                                    SizedBox(height: size.height * 0.04),
+
+                                    CustomTextField(
+                                      label: 'Email',
+                                      hint: 'tu@email.com',
+                                      controller: _emailController,
+                                      keyboardType: TextInputType.emailAddress,
+                                      prefixIcon: Icons.email_outlined,
+                                      validator: _validateEmail,
+                                    ),
+
+                                    const SizedBox(height: 20),
+
+                                    CustomTextField(
+                                      label: 'Contraseña',
+                                      hint: 'Tu contraseña',
+                                      controller: _passwordController,
+                                      obscureText: !_isPasswordVisible,
+                                      prefixIcon: Icons.lock_outline,
+                                      suffixIcon: _isPasswordVisible
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                      onSuffixIconTap: () {
+                                        setState(() {
+                                          _isPasswordVisible =
+                                              !_isPasswordVisible;
+                                        });
+                                      },
+                                      validator: _validatePassword,
+                                    ),
+
+                                    const SizedBox(height: 30),
+
+                                    CustomButton(
+                                      text: 'Acceder al Sistema',
+                                      isLoading: _isLoading,
+                                      onPressed: _handleLogin,
+                                    ),
+
+                                    const SizedBox(height: 20),
+
+                                    Center(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: const Text(
+                                                'Contacte al administrador del edificio',
+                                              ),
+                                              backgroundColor: Colors.white
+                                                  .withOpacity(0.1),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          '¿Problemas de acceso?',
+                                          style: TextStyle(
+                                            color: Colors.white.withOpacity(
+                                              0.7,
+                                            ),
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
