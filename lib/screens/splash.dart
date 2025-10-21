@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 import '../services/firebase_service.dart';
-import 'login.dart';
+import '../providers/auth_provider.dart';
 import 'biometric_auth.dart';
-import 'dashboard.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -94,9 +94,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateToLogin() {
     if (mounted) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+      Navigator.of(context).pushReplacementNamed('/login');
     }
   }
 
@@ -120,13 +118,11 @@ class _SplashScreenState extends State<SplashScreen>
         return;
       }
 
-      final userData = sessionData['user'] as Map<String, String>;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) =>
-              DashboardScreen(userName: userData['name'] ?? 'Usuario'),
-        ),
-      );
+      // Cargar los datos del usuario en el Provider
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      authProvider.loadStoredAuth();
+
+      Navigator.of(context).pushReplacementNamed('/dashboard');
     }
   }
 

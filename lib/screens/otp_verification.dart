@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../components/custom_button.dart';
 import '../components/notification_helper.dart';
 import '../services/auth_service.dart';
 import '../services/dio_client.dart';
-import '../models/auth_model.dart';
-import 'dashboard.dart';
+import '../models/auth_model.dart' as models;
+import '../providers/auth_provider.dart';
 import 'login.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
@@ -181,7 +182,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     _focusNodes[0].requestFocus();
   }
 
-  Future<void> _handleSuccessfulLogin(TwoFactorResponse verifyResponse) async {
+  Future<void> _handleSuccessfulLogin(
+    models.TwoFactorResponse verifyResponse,
+  ) async {
     final bool biometricsAvailable = await AuthService.isBiometricsAvailable();
 
     if (biometricsAvailable && mounted) {
@@ -218,7 +221,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       final bool biometricsToEnable = enableBiometrics ?? false;
 
       await AuthService.saveSession(
-        accessToken: verifyResponse.accessToken,
+        accessToken: verifyResponse.token,
         user: verifyResponse.user,
         enableBiometrics: biometricsToEnable,
       );
@@ -233,7 +236,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       }
     } else {
       await AuthService.saveSession(
-        accessToken: verifyResponse.accessToken,
+        accessToken: verifyResponse.token,
         user: verifyResponse.user,
         enableBiometrics: false,
       );
@@ -246,13 +249,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       }
     }
 
+    // Actualizar el AuthProvider con los datos del usuario
     if (mounted) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) =>
-              DashboardScreen(userName: verifyResponse.user.name),
-        ),
-      );
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      await authProvider.loadStoredAuth();
+
+      // Navegar al nuevo dashboard
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil('/dashboard', (route) => false);
     }
   }
 
