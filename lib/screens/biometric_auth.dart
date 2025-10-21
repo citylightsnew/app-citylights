@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
+import '../models/models.dart';
 import '../components/notification_helper.dart';
 import '../providers/auth_provider.dart';
 import 'login.dart';
@@ -159,7 +160,7 @@ class _BiometricAuthScreenState extends State<BiometricAuthScreen>
 
   @override
   Widget build(BuildContext context) {
-    final userData = widget.sessionData['user'] as Map<String, String>;
+    final user = widget.sessionData['user'] as User;
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -242,7 +243,7 @@ class _BiometricAuthScreenState extends State<BiometricAuthScreen>
                       Column(
                         children: [
                           Text(
-                            'Hola ${userData['name']?.split(' ')[0] ?? 'Usuario'}',
+                            'Hola ${user.name.split(' ')[0]}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: screenHeight * 0.032,
