@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../config/app_theme.dart';
 import '../../services/edificio_service.dart';
 import '../../models/edificio_model.dart';
+import '../../components/components.dart';
 
 class EdificiosScreen extends StatefulWidget {
   const EdificiosScreen({super.key});
@@ -426,6 +427,7 @@ class _EdificiosScreenState extends State<EdificiosScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: const AppBottomNavBar(selectedIndex: 0),
     );
   }
 

@@ -5,6 +5,7 @@ import '../../config/app_theme.dart';
 import '../../services/booking_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/booking_model.dart';
+import '../../components/components.dart';
 import 'package:intl/intl.dart';
 
 class ReservasScreen extends StatefulWidget {
@@ -723,6 +724,7 @@ class _ReservasScreenState extends State<ReservasScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: const AppBottomNavBar(selectedIndex: 0),
     );
   }
 

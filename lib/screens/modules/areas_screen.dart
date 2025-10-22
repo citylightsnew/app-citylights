@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../config/app_theme.dart';
 import '../../services/booking_service.dart';
 import '../../models/booking_model.dart';
+import '../../components/components.dart';
 
 class AreasScreen extends StatefulWidget {
   const AreasScreen({super.key});
@@ -28,16 +29,18 @@ class _AreasScreenState extends State<AreasScreen> {
     setState(() => _isLoading = true);
     try {
       final areas = await _service.getAllAreas();
-      setState(() {
-        _areas = areas;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+        setState(() {
+          _areas = areas;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al cargar áreas: ${e.toString()}')),
+        );
       }
     }
   }
@@ -574,6 +577,7 @@ class _AreasScreenState extends State<AreasScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: const AppBottomNavBar(selectedIndex: 0),
     );
   }
 

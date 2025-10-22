@@ -222,6 +222,27 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
           setState(() {
             _selectedIndex = index;
           });
+
+          // Navegar según la selección
+          switch (index) {
+            case 0:
+              // Ya estamos en Inicio
+              break;
+            case 1:
+              // Estadísticas - Por ahora mostrar mensaje
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Estadísticas - Próximamente')),
+              );
+              break;
+            case 2:
+              // Notificaciones - Navegar a pantalla de notificaciones
+              Navigator.pushNamed(context, '/notification-test');
+              break;
+            case 3:
+              // Perfil/Configuración
+              Navigator.pushNamed(context, '/settings');
+              break;
+          }
         },
         backgroundColor: AppTheme.surface,
         elevation: 8,
@@ -242,9 +263,9 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
             label: 'Notificaciones',
           ),
           NavigationDestination(
-            icon: FaIcon(FontAwesomeIcons.user, size: 20),
-            selectedIcon: FaIcon(FontAwesomeIcons.user, size: 22),
-            label: 'Perfil',
+            icon: FaIcon(FontAwesomeIcons.gear, size: 20),
+            selectedIcon: FaIcon(FontAwesomeIcons.gear, size: 22),
+            label: 'Configuración',
           ),
         ],
       ),

@@ -10,6 +10,7 @@ import 'screens/modules/garajes_screen.dart';
 import 'screens/modules/areas_screen.dart';
 import 'screens/modules/reservas_screen.dart';
 import 'screens/modules/users_screen.dart';
+import 'screens/modules/settings_screen.dart';
 import 'screens/modules/module_placeholder_screen.dart';
 import 'services/firebase_service.dart';
 import 'components/in_app_notification_overlay.dart';
@@ -101,11 +102,7 @@ class _MyAppState extends State<MyApp> {
             icon: FontAwesomeIcons.userShield,
             color: Color(0xFFEF4444),
           ),
-          '/settings': (context) => const ModulePlaceholderScreen(
-            title: 'Configuración',
-            icon: FontAwesomeIcons.gear,
-            color: Color(0xFF6B7280),
-          ),
+          '/settings': (context) => const SettingsScreen(),
         },
         debugShowCheckedModeBanner: false,
       ),
