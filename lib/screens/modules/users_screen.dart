@@ -27,18 +27,26 @@ class _UsersScreenState extends State<UsersScreen> {
   }
 
   Future<void> _loadData() async {
+    if (!mounted) return;
     setState(() => _isLoading = true);
     try {
+      print('🔄 Cargando usuarios y roles...');
       final users = await _service.getAllUsers();
+      print('✅ ${users.length} usuarios cargados');
+
       final roles = await _service.getAllRoles();
+      print('✅ ${roles.length} roles cargados');
+
       if (mounted) {
         setState(() {
           _users = users;
           _roles = roles;
           _isLoading = false;
         });
+        print('✅ Estado actualizado correctamente');
       }
     } catch (e) {
+      print('❌ Error al cargar datos: $e');
       if (mounted) {
         setState(() => _isLoading = false);
 
@@ -46,6 +54,7 @@ class _UsersScreenState extends State<UsersScreen> {
         if (e.toString().contains('401') ||
             e.toString().contains('Unauthorized')) {
           errorMessage = 'No autorizado. Por favor, inicia sesión nuevamente';
+          print('❌ Error 401: Token inválido o expirado');
           // Redirigir al login después de 2 segundos
           Future.delayed(const Duration(seconds: 2), () {
             if (mounted) {
