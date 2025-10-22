@@ -10,6 +10,7 @@ import 'screens/modules/garajes_screen.dart';
 import 'screens/modules/areas_screen.dart';
 import 'screens/modules/reservas_screen.dart';
 import 'screens/modules/users_screen.dart';
+import 'screens/modules/roles_screen.dart';
 import 'screens/modules/settings_screen.dart';
 import 'screens/modules/module_placeholder_screen.dart';
 import 'services/firebase_service.dart';
@@ -97,11 +98,7 @@ class _MyAppState extends State<MyApp> {
             color: Color(0xFF14B8A6),
           ),
           '/users': (context) => const UsersScreen(),
-          '/roles': (context) => const ModulePlaceholderScreen(
-            title: 'Roles',
-            icon: FontAwesomeIcons.userShield,
-            color: Color(0xFFEF4444),
-          ),
+          '/roles': (context) => const RolesScreen(),
           '/settings': (context) => const SettingsScreen(),
         },
         debugShowCheckedModeBanner: false,
