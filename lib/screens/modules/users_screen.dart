@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../config/app_theme.dart';
 import '../../services/user_service.dart';
 import '../../models/user_model.dart';
+import '../../components/components.dart';
 
 class UsersScreen extends StatefulWidget {
   const UsersScreen({super.key});
@@ -30,17 +31,43 @@ class _UsersScreenState extends State<UsersScreen> {
     try {
       final users = await _service.getAllUsers();
       final roles = await _service.getAllRoles();
-      setState(() {
-        _users = users;
-        _roles = roles;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+        setState(() {
+          _users = users;
+          _roles = roles;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+
+        String errorMessage = 'Error al cargar datos';
+        if (e.toString().contains('401') ||
+            e.toString().contains('Unauthorized')) {
+          errorMessage = 'No autorizado. Por favor, inicia sesión nuevamente';
+          // Redirigir al login después de 2 segundos
+          Future.delayed(const Duration(seconds: 2), () {
+            if (mounted) {
+              Navigator.of(
+                context,
+              ).pushNamedAndRemoveUntil('/login', (route) => false);
+            }
+          });
+        } else if (e.toString().contains('403') ||
+            e.toString().contains('Forbidden')) {
+          errorMessage = 'No tienes permisos para acceder a esta sección';
+        } else {
+          errorMessage = 'Error: ${e.toString()}';
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Colors.red.shade700,
+          ),
+        );
       }
     }
   }
@@ -581,6 +608,7 @@ class _UsersScreenState extends State<UsersScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: const AppBottomNavBar(selectedIndex: 0),
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../config/app_theme.dart';
 import '../../services/edificio_service.dart';
 import '../../models/edificio_model.dart';
+import '../../components/components.dart';
 
 class GarajesScreen extends StatefulWidget {
   const GarajesScreen({super.key});
@@ -545,6 +546,7 @@ class _GarajesScreenState extends State<GarajesScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: const AppBottomNavBar(selectedIndex: 0),
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../config/app_theme.dart';
 import '../../services/edificio_service.dart';
 import '../../models/edificio_model.dart';
+import '../../components/components.dart';
 
 class HabitacionesScreen extends StatefulWidget {
   const HabitacionesScreen({super.key});
@@ -654,6 +655,7 @@ class _HabitacionesScreenState extends State<HabitacionesScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: const AppBottomNavBar(selectedIndex: 0),
     );
   }
 
