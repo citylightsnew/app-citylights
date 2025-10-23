@@ -176,18 +176,18 @@ class _SplashScreenState extends State<SplashScreen>
                             ),
                             borderRadius: BorderRadius.circular(30),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.1),
+                              color: Colors.white.withValues(alpha: 0.1),
                               width: 1.5,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.6),
+                                color: Colors.black.withValues(alpha: 0.6),
                                 spreadRadius: 0,
                                 blurRadius: 25,
                                 offset: const Offset(0, 10),
                               ),
                               BoxShadow(
-                                color: Colors.white.withOpacity(0.05),
+                                color: Colors.white.withValues(alpha: 0.05),
                                 spreadRadius: -2,
                                 blurRadius: 10,
                                 offset: const Offset(0, -5),
@@ -207,8 +207,8 @@ class _SplashScreenState extends State<SplashScreen>
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
                                       colors: [
-                                        Colors.blue.withOpacity(0.8),
-                                        Colors.purple.withOpacity(0.8),
+                                        Colors.blue.withValues(alpha: 0.8),
+                                        Colors.purple.withValues(alpha: 0.8),
                                       ],
                                     ),
                                     borderRadius: BorderRadius.circular(15),
@@ -266,20 +266,20 @@ class _SplashScreenState extends State<SplashScreen>
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  Colors.white.withOpacity(0.1),
-                                  Colors.white.withOpacity(0.05),
+                                  Colors.white.withValues(alpha: 0.1),
+                                  Colors.white.withValues(alpha: 0.05),
                                 ],
                               ),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: Colors.white.withOpacity(0.1),
+                                color: Colors.white.withValues(alpha: 0.1),
                               ),
                             ),
                             child: Text(
                               'Iluminando tu camino',
                               style: TextStyle(
                                 fontSize: size.width * 0.035,
-                                color: Colors.white.withOpacity(0.8),
+                                color: Colors.white.withValues(alpha: 0.8),
                                 fontWeight: FontWeight.w300,
                                 letterSpacing: 1,
                               ),
@@ -307,13 +307,13 @@ class _SplashScreenState extends State<SplashScreen>
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [
-                              Colors.white.withOpacity(0.1),
-                              Colors.white.withOpacity(0.05),
+                              Colors.white.withValues(alpha: 0.1),
+                              Colors.white.withValues(alpha: 0.05),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(25),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.1),
+                            color: Colors.white.withValues(alpha: 0.1),
                           ),
                         ),
                         child: const CircularProgressIndicator(
@@ -336,7 +336,7 @@ class _SplashScreenState extends State<SplashScreen>
                         'Verificando sesión...',
                         style: TextStyle(
                           fontSize: size.width * 0.032,
-                          color: Colors.white.withOpacity(0.6),
+                          color: Colors.white.withValues(alpha: 0.6),
                           fontWeight: FontWeight.w300,
                           letterSpacing: 0.5,
                         ),

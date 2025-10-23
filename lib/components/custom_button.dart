@@ -18,7 +18,7 @@ class CustomButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.width,
-    this.height = 50,
+    this.height = 56,
     this.padding,
   });
 
@@ -36,32 +36,39 @@ class CustomButton extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white.withOpacity(0.9),
-                  Colors.white.withOpacity(0.8),
-                  Colors.white.withOpacity(0.7),
+                  Colors.white.withValues(alpha: 0.95),
+                  Colors.white.withValues(alpha: 0.88),
+                  Colors.white.withValues(alpha: 0.80),
                 ],
               )
             : LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  backgroundColor ?? Colors.purple,
-                  (backgroundColor ?? Colors.purple).withOpacity(0.8),
+                  backgroundColor ?? Colors.blue,
+                  (backgroundColor ?? Colors.blue).withValues(alpha: 0.85),
                 ],
               ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         border: isDarkTheme
-            ? Border.all(color: Colors.white.withOpacity(0.3))
+            ? Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1.5)
             : null,
         boxShadow: [
           BoxShadow(
             color: isDarkTheme
-                ? Colors.black.withOpacity(0.3)
-                : (backgroundColor ?? Colors.purple).withOpacity(0.3),
+                ? Colors.white.withValues(alpha: 0.2)
+                : (backgroundColor ?? Colors.blue).withValues(alpha: 0.3),
             spreadRadius: 0,
-            blurRadius: 8,
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
+          if (isDarkTheme)
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.3),
+              spreadRadius: 0,
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
         ],
       ),
       child: ElevatedButton(
@@ -69,23 +76,29 @@ class CustomButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           foregroundColor: isDarkTheme
-              ? Colors.black87
+              ? const Color(0xFF0A0A0A)
               : (textColor ?? Colors.white),
           padding: padding ?? const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
           elevation: 0,
           shadowColor: Colors.transparent,
+          disabledBackgroundColor: Colors.transparent,
+          disabledForegroundColor: isDarkTheme
+              ? const Color(0xFF0A0A0A).withValues(alpha: 0.6)
+              : Colors.white.withValues(alpha: 0.6),
         ),
         child: isLoading
             ? SizedBox(
-                width: 20,
-                height: 20,
+                width: 24,
+                height: 24,
                 child: CircularProgressIndicator(
-                  strokeWidth: 2,
+                  strokeWidth: 2.5,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    isDarkTheme ? Colors.black87 : Colors.white,
+                    isDarkTheme
+                        ? const Color(0xFF0A0A0A)
+                        : (textColor ?? Colors.white),
                   ),
                 ),
               )
@@ -93,10 +106,10 @@ class CustomButton extends StatelessWidget {
                 text,
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0.5,
                   color: isDarkTheme
-                      ? Colors.black87
+                      ? const Color(0xFF0A0A0A)
                       : (textColor ?? Colors.white),
                 ),
               ),

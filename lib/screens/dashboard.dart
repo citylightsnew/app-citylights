@@ -124,11 +124,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   colors: [Color(0xFF2A2A2A), Color(0xFF1A1A1A)],
                 ),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.white.withOpacity(0.1)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
               child: Icon(
                 Icons.business_outlined,
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha: 0.8),
                 size: 18,
               ),
             ),
@@ -149,12 +149,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Colors.red.withOpacity(0.2),
-                  Colors.red.withOpacity(0.1),
+                  Colors.red.withValues(alpha: 0.2),
+                  Colors.red.withValues(alpha: 0.1),
                 ],
               ),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.red.withOpacity(0.3)),
+              border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
             ),
             child: IconButton(
               icon: const Icon(Icons.logout_rounded, size: 20),
@@ -166,7 +166,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       backgroundColor: const Color(0xFF1F1F1F),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
-                        side: BorderSide(color: Colors.white.withOpacity(0.1)),
+                        side: BorderSide(
+                          color: Colors.white.withValues(alpha: 0.1),
+                        ),
                       ),
                       title: Text(
                         'Cerrar Sesión',
@@ -177,14 +179,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       content: Text(
                         '¿Deseas salir del sistema del edificio?',
-                        style: TextStyle(color: Colors.white.withOpacity(0.8)),
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.8),
+                        ),
                       ),
                       actions: [
                         TextButton(
                           child: Text(
                             'Cancelar',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
+                              color: Colors.white.withValues(alpha: 0.7),
                             ),
                           ),
                           onPressed: () {
@@ -195,8 +199,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Colors.red.withOpacity(0.8),
-                                Colors.red.withOpacity(0.6),
+                                Colors.red.withValues(alpha: 0.8),
+                                Colors.red.withValues(alpha: 0.6),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(8),
@@ -255,10 +259,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.1),
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withValues(alpha: 0.5),
                         spreadRadius: 0,
                         blurRadius: 15,
                         offset: const Offset(0, 5),
@@ -273,19 +279,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              Colors.blue.withOpacity(0.3),
-                              Colors.purple.withOpacity(0.3),
+                              Colors.blue.withValues(alpha: 0.3),
+                              Colors.purple.withValues(alpha: 0.3),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(30),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                           ),
                         ),
                         child: Icon(
                           Icons.person_outline_rounded,
                           size: 28,
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -297,7 +303,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               '${_getGreeting()}!',
                               style: TextStyle(
                                 fontSize: size.width * 0.04,
-                                color: Colors.white.withOpacity(0.7),
+                                color: Colors.white.withValues(alpha: 0.7),
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -322,13 +328,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              Colors.green.withOpacity(0.2),
-                              Colors.green.withOpacity(0.1),
+                              Colors.green.withValues(alpha: 0.2),
+                              Colors.green.withValues(alpha: 0.1),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
-                            color: Colors.green.withOpacity(0.3),
+                            color: Colors.green.withValues(alpha: 0.3),
                           ),
                         ),
                         child: Row(
@@ -337,14 +343,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             Icon(
                               Icons.verified_outlined,
                               size: 14,
-                              color: Colors.green.withOpacity(0.8),
+                              color: Colors.green.withValues(alpha: 0.8),
                             ),
                             const SizedBox(width: 4),
                             Text(
                               'Conectado',
                               style: TextStyle(
                                 fontSize: 11,
-                                color: Colors.green.withOpacity(0.9),
+                                color: Colors.green.withValues(alpha: 0.9),
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -372,10 +378,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.1),
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withValues(alpha: 0.5),
                         spreadRadius: 0,
                         blurRadius: 15,
                         offset: const Offset(0, 5),
@@ -392,15 +400,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  Colors.blue.withOpacity(0.3),
-                                  Colors.purple.withOpacity(0.3),
+                                  Colors.blue.withValues(alpha: 0.3),
+                                  Colors.purple.withValues(alpha: 0.3),
                                 ],
                               ),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
                               Icons.business_center_outlined,
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                               size: 20,
                             ),
                           ),
@@ -421,7 +429,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         'Bienvenido al sistema de gestión del edificio City Lights. Desde aquí puedes monitorear y controlar los diferentes servicios.',
                         style: TextStyle(
                           fontSize: size.width * 0.038,
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                           height: 1.5,
                           fontWeight: FontWeight.w300,
                         ),
@@ -432,20 +440,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              Colors.blue.withOpacity(0.15),
-                              Colors.purple.withOpacity(0.1),
+                              Colors.blue.withValues(alpha: 0.15),
+                              Colors.purple.withValues(alpha: 0.1),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: Colors.blue.withOpacity(0.2),
+                            color: Colors.blue.withValues(alpha: 0.2),
                           ),
                         ),
                         child: Row(
                           children: [
                             Icon(
                               Icons.info_outline_rounded,
-                              color: Colors.blue.withOpacity(0.8),
+                              color: Colors.blue.withValues(alpha: 0.8),
                               size: 18,
                             ),
                             const SizedBox(width: 12),
@@ -453,7 +461,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Text(
                                 'Sistema en desarrollo. Nuevas funcionalidades de edificio próximamente.',
                                 style: TextStyle(
-                                  color: Colors.blue.withOpacity(0.9),
+                                  color: Colors.blue.withValues(alpha: 0.9),
                                   fontSize: size.width * 0.032,
                                   fontWeight: FontWeight.w300,
                                 ),
@@ -481,7 +489,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.1),
+                            color: Colors.white.withValues(alpha: 0.1),
                           ),
                         ),
                         child: Column(
@@ -491,8 +499,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    Colors.blue.withOpacity(0.3),
-                                    Colors.blue.withOpacity(0.2),
+                                    Colors.blue.withValues(alpha: 0.3),
+                                    Colors.blue.withValues(alpha: 0.2),
                                   ],
                                 ),
                                 borderRadius: BorderRadius.circular(10),
@@ -500,7 +508,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Icon(
                                 Icons.electrical_services_outlined,
                                 size: 24,
-                                color: Colors.blue.withOpacity(0.9),
+                                color: Colors.blue.withValues(alpha: 0.9),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -517,7 +525,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               'Operativo',
                               style: TextStyle(
                                 fontSize: size.width * 0.028,
-                                color: Colors.green.withOpacity(0.8),
+                                color: Colors.green.withValues(alpha: 0.8),
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -537,7 +545,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.1),
+                            color: Colors.white.withValues(alpha: 0.1),
                           ),
                         ),
                         child: Column(
@@ -547,8 +555,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [
-                                    Colors.green.withOpacity(0.3),
-                                    Colors.green.withOpacity(0.2),
+                                    Colors.green.withValues(alpha: 0.3),
+                                    Colors.green.withValues(alpha: 0.2),
                                   ],
                                 ),
                                 borderRadius: BorderRadius.circular(10),
@@ -556,7 +564,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: Icon(
                                 Icons.security_outlined,
                                 size: 24,
-                                color: Colors.green.withOpacity(0.9),
+                                color: Colors.green.withValues(alpha: 0.9),
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -573,7 +581,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               'Activo',
                               style: TextStyle(
                                 fontSize: size.width * 0.028,
-                                color: Colors.green.withOpacity(0.8),
+                                color: Colors.green.withValues(alpha: 0.8),
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -600,10 +608,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.purple.withOpacity(0.3)),
+                    border: Border.all(
+                      color: Colors.purple.withValues(alpha: 0.3),
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.purple.withOpacity(0.1),
+                        color: Colors.purple.withValues(alpha: 0.1),
                         spreadRadius: 0,
                         blurRadius: 15,
                         offset: const Offset(0, 5),
@@ -620,15 +630,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  Colors.purple.withOpacity(0.3),
-                                  Colors.purple.withOpacity(0.2),
+                                  Colors.purple.withValues(alpha: 0.3),
+                                  Colors.purple.withValues(alpha: 0.2),
                                 ],
                               ),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
                               Icons.security,
-                              color: Colors.purple.withOpacity(0.9),
+                              color: Colors.purple.withValues(alpha: 0.9),
                               size: 20,
                             ),
                           ),
@@ -669,13 +679,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Colors.purple.withOpacity(0.2),
-                                Colors.purple.withOpacity(0.1),
+                                Colors.purple.withValues(alpha: 0.2),
+                                Colors.purple.withValues(alpha: 0.1),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: Colors.purple.withOpacity(0.3),
+                              color: Colors.purple.withValues(alpha: 0.3),
                             ),
                           ),
                           child: Row(
@@ -711,7 +721,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                               Icon(
                                 Icons.arrow_forward_ios,
-                                color: Colors.purple.withOpacity(0.7),
+                                color: Colors.purple.withValues(alpha: 0.7),
                                 size: 16,
                               ),
                             ],
@@ -738,10 +748,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.1),
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withValues(alpha: 0.5),
                         spreadRadius: 0,
                         blurRadius: 15,
                         offset: const Offset(0, 5),
@@ -755,7 +767,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: [
                           Icon(
                             Icons.touch_app_outlined,
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(alpha: 0.8),
                             size: 20,
                           ),
                           const SizedBox(width: 8),
@@ -786,7 +798,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               content: const Text(
                                 'Sistema de luces próximamente',
                               ),
-                              backgroundColor: Colors.orange.withOpacity(0.8),
+                              backgroundColor: Colors.orange.withValues(
+                                alpha: 0.8,
+                              ),
                             ),
                           );
                         },
@@ -807,7 +821,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               content: const Text(
                                 'Control de accesos próximamente',
                               ),
-                              backgroundColor: Colors.blue.withOpacity(0.8),
+                              backgroundColor: Colors.blue.withValues(
+                                alpha: 0.8,
+                              ),
                             ),
                           );
                         },
@@ -828,7 +844,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               content: const Text(
                                 'Sistema de mantenimiento próximamente',
                               ),
-                              backgroundColor: Colors.green.withOpacity(0.8),
+                              backgroundColor: Colors.green.withValues(
+                                alpha: 0.8,
+                              ),
                             ),
                           );
                         },
@@ -864,7 +882,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [color.withOpacity(0.3), color.withOpacity(0.2)],
+                  colors: [
+                    color.withValues(alpha: 0.3),
+                    color.withValues(alpha: 0.2),
+                  ],
                 ),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: color.withOpacity(0.4)),

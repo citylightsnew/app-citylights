@@ -19,25 +19,56 @@ class AppTheme {
   static const Color success = Color(0xFF10B981);
   static const Color info = Color(0xFF3B82F6);
 
-  // Colores de fondo
+  // Colores de fondo (Light)
   static const Color background = Color(0xFFF9FAFB);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceVariant = Color(0xFFF3F4F6);
 
-  // Colores de texto
+  // Colores de fondo (Dark)
+  static const Color darkBackground = Color(0xFF0A0A0A);
+  static const Color darkSurface = Color(0xFF1A1A1A);
+  static const Color darkSurfaceVariant = Color(0xFF2A2A2A);
+  static const Color darkCard = Color(0xFF1F1F1F);
+
+  // Colores de texto (Light)
   static const Color textPrimary = Color(0xFF111827);
   static const Color textSecondary = Color(0xFF6B7280);
   static const Color textDisabled = Color(0xFF9CA3AF);
   static const Color textOnPrimary = Color(0xFFFFFFFF);
 
+  // Colores de texto (Dark)
+  static const Color darkTextPrimary = Color(0xFFFFFFFF);
+  static const Color darkTextSecondary = Color(0xFFB0B0B0);
+  static const Color darkTextDisabled = Color(0xFF6B7280);
+
   // Colores de borde
   static const Color border = Color(0xFFE5E7EB);
   static const Color borderDark = Color(0xFFD1D5DB);
+  static const Color darkBorder = Color(0xFF2A2A2A);
+
+  // Gradientes para Dark Theme
+  static const LinearGradient darkBackgroundGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFF0D0D0D), Color(0xFF0A0A0A), Color(0xFF000000)],
+  );
+
+  static const LinearGradient darkCardGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF1F1F1F), Color(0xFF171717), Color(0xFF0F0F0F)],
+  );
+
+  static const LinearGradient darkGlassGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0x33FFFFFF), Color(0x1AFFFFFF), Color(0x0DFFFFFF)],
+  );
 
   // Sombras
   static List<BoxShadow> get cardShadow => [
     BoxShadow(
-      color: Colors.black.withOpacity(0.05),
+      color: Colors.black.withValues(alpha: 0.05),
       blurRadius: 10,
       offset: const Offset(0, 2),
     ),
@@ -45,7 +76,7 @@ class AppTheme {
 
   static List<BoxShadow> get elevatedShadow => [
     BoxShadow(
-      color: Colors.black.withOpacity(0.1),
+      color: Colors.black.withValues(alpha: 0.1),
       blurRadius: 20,
       offset: const Offset(0, 4),
     ),

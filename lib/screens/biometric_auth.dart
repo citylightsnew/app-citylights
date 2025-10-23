@@ -208,8 +208,8 @@ class _BiometricAuthScreenState extends State<BiometricAuthScreen>
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  Colors.blue.withOpacity(0.8),
-                                  Colors.purple.withOpacity(0.8),
+                                  Colors.blue.withValues(alpha: 0.8),
+                                  Colors.purple.withValues(alpha: 0.8),
                                 ],
                               ),
                               borderRadius: BorderRadius.circular(15),

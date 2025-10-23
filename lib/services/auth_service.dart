@@ -294,4 +294,31 @@ class AuthService {
       return false;
     }
   }
+
+  // Método para cerrar sesión
+  Future<void> logout() async {
+    try {
+      // Intentar cerrar sesión en el backend
+      try {
+        await _client.post('/api/auth/logout');
+      } catch (e) {
+        // Continuar con el logout local aunque falle el backend
+        print('⚠️ Error al cerrar sesión en el servidor: $e');
+      }
+
+      // Limpiar el storage local
+      await _secureStorage.delete(key: _keyAccessToken);
+      await _secureStorage.delete(key: _keyUserData);
+      await _secureStorage.delete(key: _keyIsLoggedIn);
+
+      // Limpiar preferencias de SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      print('✅ Sesión cerrada exitosamente');
+    } catch (e) {
+      print('❌ Error al cerrar sesión: $e');
+      throw ApiException(message: 'Error al cerrar sesión', statusCode: 500);
+    }
+  }
 }

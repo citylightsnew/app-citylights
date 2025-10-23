@@ -285,8 +285,8 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: _canReceiveNotifications
-              ? Colors.green.withOpacity(0.3)
-              : Colors.orange.withOpacity(0.3),
+              ? Colors.green.withValues(alpha: 0.3)
+              : Colors.orange.withValues(alpha: 0.3),
         ),
       ),
       child: Column(
@@ -298,8 +298,8 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: _canReceiveNotifications
-                      ? Colors.green.withOpacity(0.2)
-                      : Colors.orange.withOpacity(0.2),
+                      ? Colors.green.withValues(alpha: 0.2)
+                      : Colors.orange.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -488,14 +488,16 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
         onPressed: _isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: isHighlighted
-              ? color.withOpacity(0.2)
+              ? color.withValues(alpha: 0.2)
               : const Color(0xFF1A1A1A),
           foregroundColor: Colors.white,
           padding: const EdgeInsets.all(16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          side: BorderSide(color: color.withOpacity(isHighlighted ? 0.5 : 0.3)),
+          side: BorderSide(
+            color: color.withValues(alpha: isHighlighted ? 0.5 : 0.3),
+          ),
           elevation: 0,
         ),
         child: Row(
@@ -503,7 +505,7 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
+                color: color.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, color: color, size: 20),
@@ -544,9 +546,9 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.1),
+        color: Colors.green.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.green.withOpacity(0.3)),
+        border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [

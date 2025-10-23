@@ -32,16 +32,18 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: Colors.white,
-            letterSpacing: 0.5,
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 10),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.white.withValues(alpha: 0.9),
+              letterSpacing: 0.3,
+            ),
           ),
         ),
-        const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
             gradient: isDarkTheme
@@ -49,91 +51,105 @@ class CustomTextField extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white.withOpacity(0.15),
-                      Colors.white.withOpacity(0.08),
-                      Colors.white.withOpacity(0.05),
+                      Colors.white.withValues(alpha: 0.08),
+                      Colors.white.withValues(alpha: 0.04),
+                      Colors.white.withValues(alpha: 0.02),
                     ],
                   )
                 : null,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: isDarkTheme
-                  ? Colors.white.withOpacity(0.2)
-                  : Colors.grey.withOpacity(0.5),
+                  ? Colors.white.withValues(alpha: 0.15)
+                  : Colors.grey.withValues(alpha: 0.5),
+              width: 1.5,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.2),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           child: TextFormField(
             controller: controller,
             obscureText: obscureText,
             keyboardType: keyboardType,
             validator: validator,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.w400,
             ),
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: TextStyle(
-                color: isDarkTheme
-                    ? Colors.white.withOpacity(0.5)
-                    : Colors.grey.withOpacity(0.7),
+                color: Colors.white.withValues(alpha: 0.4),
                 fontWeight: FontWeight.w300,
+                fontSize: 15,
               ),
               prefixIcon: prefixIcon != null
-                  ? Icon(
-                      prefixIcon,
-                      color: isDarkTheme
-                          ? Colors.white.withOpacity(0.7)
-                          : Colors.grey.withOpacity(0.8),
-                      size: 20,
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 12),
+                      child: Icon(
+                        prefixIcon,
+                        color: Colors.white.withValues(alpha: 0.6),
+                        size: 22,
+                      ),
                     )
                   : null,
               suffixIcon: suffixIcon != null
-                  ? GestureDetector(
-                      onTap: onSuffixIconTap,
-                      child: Icon(
-                        suffixIcon,
-                        color: isDarkTheme
-                            ? Colors.white.withOpacity(0.7)
-                            : Colors.grey.withOpacity(0.8),
-                        size: 20,
+                  ? Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: IconButton(
+                        onPressed: onSuffixIconTap,
+                        icon: Icon(
+                          suffixIcon,
+                          color: Colors.white.withValues(alpha: 0.6),
+                          size: 22,
+                        ),
+                        splashRadius: 20,
                       ),
                     )
                   : null,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide(
                   color: isDarkTheme
-                      ? Colors.white.withOpacity(0.6)
-                      : Colors.purple,
+                      ? Colors.white.withValues(alpha: 0.5)
+                      : Colors.blue,
                   width: 2,
                 ),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide(
-                  color: isDarkTheme ? Colors.red.withOpacity(0.8) : Colors.red,
-                  width: 2,
+                  color: Colors.red.withValues(alpha: 0.7),
+                  width: 1.5,
                 ),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide(
-                  color: isDarkTheme ? Colors.red.withOpacity(0.8) : Colors.red,
+                  color: Colors.red.withValues(alpha: 0.9),
                   width: 2,
                 ),
               ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 16,
+              errorStyle: TextStyle(
+                color: Colors.red.withValues(alpha: 0.9),
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
               ),
-              filled: !isDarkTheme,
-              fillColor: isDarkTheme ? null : Colors.grey.withOpacity(0.05),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: prefixIcon != null ? 8 : 20,
+                vertical: 18,
+              ),
+              filled: false,
             ),
           ),
         ),
