@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'screens/splash.dart';
-import 'screens/main_dashboard_screen.dart';
+import 'screens/dashboards/dashboard_router.dart';
 import 'screens/login.dart';
 import 'screens/modules/edificios_screen.dart';
 import 'screens/modules/habitaciones_screen.dart';
@@ -71,7 +71,17 @@ class _MyAppState extends State<MyApp> {
           '/': (context) =>
               const InAppNotificationOverlay(child: SplashScreen()),
           '/login': (context) => const LoginScreen(),
-          '/dashboard': (context) => const MainDashboardScreen(),
+          '/dashboard': (context) {
+            final authProvider = Provider.of<AuthProvider>(
+              context,
+              listen: false,
+            );
+            final user = authProvider.user;
+            return DashboardRouter(
+              userName: user?.name ?? 'Usuario',
+              user: user,
+            );
+          },
           '/edificios': (context) => const EdificiosScreen(),
           '/habitaciones': (context) => const HabitacionesScreen(),
           '/garajes': (context) => const GarajesScreen(),
