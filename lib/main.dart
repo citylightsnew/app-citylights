@@ -1,108 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'screens/splash.dart';
-import 'screens/main_dashboard_screen.dart';
-import 'screens/login.dart';
-import 'screens/modules/edificios_screen.dart';
-import 'screens/modules/habitaciones_screen.dart';
-import 'screens/modules/garajes_screen.dart';
-import 'screens/modules/areas_screen.dart';
-import 'screens/modules/reservas_screen.dart';
-import 'screens/modules/users_screen.dart';
-import 'screens/modules/roles_screen.dart';
-import 'screens/modules/settings_screen.dart';
-import 'screens/modules/module_placeholder_screen.dart';
-import 'services/firebase_service.dart';
-import 'components/in_app_notification_overlay.dart';
+import 'config/theme/app_theme.dart';
+import 'core/services/firebase_service.dart';
 import 'providers/auth_provider.dart';
-import 'config/app_theme.dart';
+import 'screens/auth/login_screen.dart';
+import 'screens/auth/register_screen.dart';
+import 'screens/auth/verify_email_screen.dart';
+import 'screens/auth/forgot_password_screen.dart';
+import 'screens/dashboard/dashboard_screen.dart';
+import 'screens/settings/biometric_setup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Inicializar Firebase
   try {
-    await FirebaseService.initialize();
+    final firebaseService = FirebaseService();
+    await firebaseService.initialize();
+    print('✅ Firebase initialized successfully');
   } catch (e) {
-    print('Error inicializando Firebase: $e');
+    print('❌ Error initializing Firebase: $e');
   }
 
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-
-  @override
-  void initState() {
-    super.initState();
-    FirebaseService.setNavigatorKey(_navigatorKey);
-  }
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => AuthProvider())],
       child: MaterialApp(
-        navigatorKey: _navigatorKey,
         title: 'City Lights',
-        theme: ThemeData(
-          primaryColor: AppTheme.primary,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: AppTheme.primary,
-            brightness: Brightness.dark,
-            background: AppTheme.background,
-            surface: AppTheme.surface,
-          ),
-          scaffoldBackgroundColor: AppTheme.background,
-          fontFamily: 'Roboto',
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          useMaterial3: true,
-        ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) =>
-              const InAppNotificationOverlay(child: SplashScreen()),
-          '/login': (context) => const LoginScreen(),
-          '/dashboard': (context) => const MainDashboardScreen(),
-          '/edificios': (context) => const EdificiosScreen(),
-          '/habitaciones': (context) => const HabitacionesScreen(),
-          '/garajes': (context) => const GarajesScreen(),
-          '/areas': (context) => const AreasScreen(),
-          '/reservas': (context) => const ReservasScreen(),
-          '/pagos': (context) => const ModulePlaceholderScreen(
-            title: 'Pagos',
-            icon: FontAwesomeIcons.creditCard,
-            color: Color(0xFF10B981),
-          ),
-          '/facturas': (context) => const ModulePlaceholderScreen(
-            title: 'Facturas',
-            icon: FontAwesomeIcons.fileInvoiceDollar,
-            color: Color(0xFFF59E0B),
-          ),
-          '/empleados': (context) => const ModulePlaceholderScreen(
-            title: 'Empleados',
-            icon: FontAwesomeIcons.userTie,
-            color: Color(0xFF6366F1),
-          ),
-          '/nomina': (context) => const ModulePlaceholderScreen(
-            title: 'Nómina',
-            icon: FontAwesomeIcons.moneyBillWave,
-            color: Color(0xFF14B8A6),
-          ),
-          '/users': (context) => const UsersScreen(),
-          '/roles': (context) => const RolesScreen(),
-          '/settings': (context) => const SettingsScreen(),
-        },
         debugShowCheckedModeBanner: false,
+        theme: AppTheme.darkTheme,
+        home: const AuthWrapper(),
+        routes: {
+          '/login': (context) => const LoginScreen(),
+          '/register': (context) => const RegisterScreen(),
+          '/forgot-password': (context) => const ForgotPasswordScreen(),
+          '/dashboard': (context) => const DashboardScreen(),
+          '/biometric-setup': (context) => const BiometricSetupScreen(),
+        },
+        onGenerateRoute: (settings) {
+          // Rutas con parámetros
+          if (settings.name == '/verify-email') {
+            final email = settings.arguments as String;
+            return MaterialPageRoute(
+              builder: (context) => VerifyEmailScreen(email: email),
+            );
+          }
+          return null;
+        },
       ),
+    );
+  }
+}
+
+class AuthWrapper extends StatefulWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthStatus();
+  }
+
+  Future<void> _checkAuthStatus() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    await authProvider.initializeAuth();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<AuthProvider>(
+      builder: (context, authProvider, _) {
+        if (authProvider.status == AuthStatus.initial ||
+            authProvider.status == AuthStatus.loading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (authProvider.status == AuthStatus.authenticated) {
+          // Navegar a Dashboard
+          return const DashboardScreen();
+        }
+
+        return const LoginScreen();
+      },
     );
   }
 }

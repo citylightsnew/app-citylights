@@ -1,182 +1,279 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'dart:convert';
-import '../models/models.dart';
-import '../services/auth_service.dart';
+import '../core/models/auth_models.dart';
+import '../core/models/user_model.dart';
+import '../core/services/auth_service.dart';
+import '../core/services/firebase_service.dart';
+
+enum AuthStatus { initial, authenticated, unauthenticated, loading }
 
 class AuthProvider with ChangeNotifier {
-  final AuthService _authService = AuthService();
-  final _storage = const FlutterSecureStorage();
+  final _authService = AuthService();
+  final _firebaseService = FirebaseService();
 
-  User? _user;
-  String? _token;
-  bool _isAuthenticated = false;
+  AuthStatus _status = AuthStatus.initial;
+  UserModel? _user;
+  String? _error;
   bool _isLoading = false;
 
-  User? get user => _user;
-  String? get token => _token;
-  bool get isAuthenticated => _isAuthenticated;
+  // Getters
+  AuthStatus get status => _status;
+  UserModel? get user => _user;
+  String? get error => _error;
+  String? get errorMessage => _error;
   bool get isLoading => _isLoading;
+  bool get isAuthenticated => _status == AuthStatus.authenticated;
 
-  AuthProvider() {
-    loadStoredAuth();
-  }
-
-  Future<void> loadStoredAuth() async {
+  // Initialize auth state
+  Future<void> initializeAuth() async {
+    _setLoading(true);
     try {
-      final token = await _storage.read(key: 'auth_token');
-      final userData = await _storage.read(key: 'user_data');
+      final isAuth = await _authService.isAuthenticated();
 
-      if (token != null && userData != null) {
-        _token = token;
-        _user = User.fromJson(jsonDecode(userData));
-        _isAuthenticated = true;
-        notifyListeners();
+      if (isAuth) {
+        final user = await _authService.getCurrentUser();
+        if (user != null) {
+          _user = user;
+          _status = AuthStatus.authenticated;
+        } else {
+          _status = AuthStatus.unauthenticated;
+        }
+      } else {
+        _status = AuthStatus.unauthenticated;
       }
     } catch (e) {
-      debugPrint('Error loading stored auth: $e');
+      _status = AuthStatus.unauthenticated;
+      _setError(e.toString());
+    } finally {
+      _setLoading(false);
     }
   }
 
-  Future<void> login(String email, String password) async {
-    _isLoading = true;
-    notifyListeners();
+  // Login
+  Future<LoginResponse> login(String email, String password) async {
+    _setLoading(true);
+    _clearError();
 
     try {
-      // Primero obtenemos el código 2FA
-      final loginResponse = await _authService.login(email, password);
+      final request = LoginRequest(email: email, password: password);
+      final response = await _authService.login(request);
 
-      // Si no requiere 2FA, obtenemos el token directamente
-      // Si requiere 2FA, necesitamos esperar el código
-      // Por ahora, asumimos que ya tenemos el token
-      if (loginResponse.token != null) {
-        _token = loginResponse.token;
-        _user = loginResponse.user;
-        _isAuthenticated = true;
-
-        // Guardar en storage
-        await _storage.write(key: 'auth_token', value: _token);
-        await _storage.write(
-          key: 'user_data',
-          value: jsonEncode(_user!.toJson()),
-        );
+      // Si no requiere 2FA, actualizar estado
+      if (!response.requiresTwoFactor && response.user != null) {
+        _user = UserModel.fromJson(response.user as Map<String, dynamic>);
+        _status = AuthStatus.authenticated;
       }
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+
+      _setLoading(false);
+      return response;
+    } catch (e) {
+      _setError(e.toString());
+      _setLoading(false);
+      rethrow;
     }
   }
 
-  Future<void> verify2FA(String email, String code) async {
-    _isLoading = true;
-    notifyListeners();
-
-    try {
-      final response = await _authService.verify2FA(email, code);
-
-      _token = response.token;
-      _user = response.user;
-      _isAuthenticated = true;
-
-      // Guardar en storage
-      await _storage.write(key: 'auth_token', value: _token);
-      await _storage.write(
-        key: 'user_data',
-        value: jsonEncode(_user!.toJson()),
-      );
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> register({
-    required String name,
+  // Register
+  Future<RegisterResponse> register({
     required String email,
     required String password,
-    required String telephone,
+    required String nombre,
+    required String apellido,
+    String? telefono,
   }) async {
-    _isLoading = true;
-    notifyListeners();
+    _setLoading(true);
+    _clearError();
 
     try {
-      await _authService.register(
-        name: name,
+      final request = RegisterRequest(
         email: email,
         password: password,
-        telephone: telephone,
+        nombre: nombre,
+        apellido: apellido,
+        telefono: telefono,
       );
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+
+      final response = await _authService.register(request);
+      _setLoading(false);
+      return response;
+    } catch (e) {
+      _setError(e.toString());
+      _setLoading(false);
+      rethrow;
     }
   }
 
-  Future<void> verifyEmail(String email, String code) async {
-    _isLoading = true;
-    notifyListeners();
+  // Verify Email
+  Future<VerifyEmailResponse> verifyEmail(String email, String code) async {
+    _setLoading(true);
+    _clearError();
 
     try {
-      await _authService.verifyEmail(email, code);
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+      final request = VerifyEmailRequest(email: email, code: code);
+      final response = await _authService.verifyEmail(request);
+      _setLoading(false);
+      return response;
+    } catch (e) {
+      _setError(e.toString());
+      _setLoading(false);
+      rethrow;
     }
   }
 
+  // Verify 2FA
+  Future<Verify2FAResponse> verify2FA(String email, String code) async {
+    _setLoading(true);
+    _clearError();
+
+    try {
+      final request = Verify2FARequest(email: email, code: code);
+      final response = await _authService.verify2FA(request);
+
+      // Actualizar estado
+      _user = UserModel.fromJson(response.user as Map<String, dynamic>);
+      _status = AuthStatus.authenticated;
+
+      // Registrar dispositivo en Firebase
+      _registerDeviceInFirebase();
+
+      _setLoading(false);
+      return response;
+    } catch (e) {
+      _setError(e.toString());
+      _setLoading(false);
+      rethrow;
+    }
+  }
+
+  // Check 2FA Status
+  Future<Check2FAStatusResponse> check2FAStatus(String requestId) async {
+    _clearError();
+
+    try {
+      final request = Check2FAStatusRequest(requestId: requestId);
+      final response = await _authService.check2FAStatus(request);
+
+      // Si fue aprobado, actualizar estado
+      if (response.isApproved && response.user != null) {
+        _user = UserModel.fromJson(response.user as Map<String, dynamic>);
+        _status = AuthStatus.authenticated;
+
+        // Registrar dispositivo en Firebase
+        _registerDeviceInFirebase();
+
+        notifyListeners();
+      }
+
+      return response;
+    } catch (e) {
+      _setError(e.toString());
+      rethrow;
+    }
+  }
+
+  // Registrar dispositivo en Firebase
+  void _registerDeviceInFirebase() {
+    if (_user?.id != null) {
+      _firebaseService.registerDevice(userId: _user!.id.toString());
+    }
+  }
+
+  // Resend Code
+  Future<ResendCodeResponse> resendCode(String email) async {
+    _clearError();
+
+    try {
+      final request = ResendCodeRequest(email: email);
+      final response = await _authService.resendCode(request);
+      return response;
+    } catch (e) {
+      _setError(e.toString());
+      rethrow;
+    }
+  }
+
+  // Forgot Password
+  Future<bool> forgotPassword(String email) async {
+    _setLoading(true);
+    _clearError();
+
+    try {
+      // Llamar al servicio de auth
+      await _authService.forgotPassword(email);
+      _setLoading(false);
+      return true;
+    } catch (e) {
+      _setError(e.toString());
+      _setLoading(false);
+      return false;
+    }
+  }
+
+  // Reset Password
+  Future<bool> resetPassword({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) async {
+    _setLoading(true);
+    _clearError();
+
+    try {
+      await _authService.resetPassword(
+        email: email,
+        code: code,
+        newPassword: newPassword,
+      );
+      _setLoading(false);
+      return true;
+    } catch (e) {
+      _setError(e.toString());
+      _setLoading(false);
+      return false;
+    }
+  }
+
+  // Refresh Profile
+  Future<void> refreshProfile() async {
+    try {
+      final user = await _authService.getProfile();
+      _user = user;
+      notifyListeners();
+    } catch (e) {
+      _setError(e.toString());
+    }
+  }
+
+  // Logout
   Future<void> logout() async {
-    _user = null;
-    _token = null;
-    _isAuthenticated = false;
+    _setLoading(true);
+    try {
+      await _authService.logout();
+      _user = null;
+      _status = AuthStatus.unauthenticated;
+    } catch (e) {
+      _setError(e.toString());
+    } finally {
+      _setLoading(false);
+    }
+  }
 
-    // Limpiar storage
-    await _storage.delete(key: 'auth_token');
-    await _storage.delete(key: 'user_data');
-
+  // Helper methods
+  void _setLoading(bool value) {
+    _isLoading = value;
     notifyListeners();
   }
 
-  Future<void> refreshUser() async {
-    if (_user != null) {
-      try {
-        // Aquí puedes hacer una llamada al backend para obtener datos actualizados del usuario
-        // Por ahora solo notificamos
-        notifyListeners();
-      } catch (e) {
-        debugPrint('Error refreshing user: $e');
-      }
-    }
+  void _setError(String message) {
+    _error = message;
+    notifyListeners();
   }
-}
 
-class LoginResponse {
-  final String? token;
-  final User? user;
-  final bool require2FA;
-  final String? message;
-
-  LoginResponse({this.token, this.user, this.require2FA = false, this.message});
-
-  factory LoginResponse.fromJson(Map<String, dynamic> json) {
-    return LoginResponse(
-      token: json['token'],
-      user: json['user'] != null ? User.fromJson(json['user']) : null,
-      require2FA: json['require2FA'] ?? false,
-      message: json['message'],
-    );
+  void clearError() {
+    _clearError();
   }
-}
 
-class TwoFactorResponse {
-  final String token;
-  final User user;
-
-  TwoFactorResponse({required this.token, required this.user});
-
-  factory TwoFactorResponse.fromJson(Map<String, dynamic> json) {
-    return TwoFactorResponse(
-      token: json['token'] ?? '',
-      user: User.fromJson(json['user']),
-    );
+  void _clearError() {
+    _error = null;
+    notifyListeners();
   }
 }
