@@ -249,10 +249,19 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       }
     }
 
-    // Actualizar el AuthProvider con los datos del usuario
+    // Actualizar el AuthProvider con los datos completos del usuario (incluyendo rol)
     if (mounted) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       await authProvider.loadStoredAuth();
+
+      // Obtener el usuario completo con el rol desde el backend
+      try {
+        final authService = AuthService();
+        final userWithRole = await authService.getCurrentUser();
+        authProvider.setUser(userWithRole);
+      } catch (e) {
+        debugPrint('⚠️ Error obteniendo usuario completo: $e');
+      }
 
       // Navegar al nuevo dashboard
       Navigator.of(

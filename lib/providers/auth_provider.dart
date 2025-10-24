@@ -136,12 +136,21 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setUser(User user) async {
+    _user = user;
+
+    // Actualizar en storage
+    await _storage.write(key: 'user_data', value: jsonEncode(user.toJson()));
+
+    notifyListeners();
+  }
+
   Future<void> refreshUser() async {
     if (_user != null) {
       try {
-        // Aquí puedes hacer una llamada al backend para obtener datos actualizados del usuario
-        // Por ahora solo notificamos
-        notifyListeners();
+        // Obtener datos actualizados del usuario desde el backend
+        final updatedUser = await _authService.getCurrentUser();
+        await setUser(updatedUser);
       } catch (e) {
         debugPrint('Error refreshing user: $e');
       }

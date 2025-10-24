@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
@@ -97,7 +98,23 @@ class AuthService {
   Future<User> getCurrentUser() async {
     try {
       final response = await _client.get('/api/auth/me');
-      return User.fromJson(response.data);
+      final userData = response.data;
+
+      // Si el usuario tiene un roleId, obtener los datos completos del rol
+      if (userData['roleId'] != null &&
+          userData['roleId'].toString().isNotEmpty) {
+        try {
+          final roleResponse = await _client.get(
+            '/api/roles/${userData['roleId']}',
+          );
+          userData['role'] = roleResponse.data;
+        } catch (e) {
+          debugPrint('⚠️ Error obteniendo rol del usuario: $e');
+          // Continuar sin el rol completo si falla
+        }
+      }
+
+      return User.fromJson(userData);
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }
