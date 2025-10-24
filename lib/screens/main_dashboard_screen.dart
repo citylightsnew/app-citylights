@@ -300,7 +300,7 @@ class _ModuleCard extends StatelessWidget {
                 height: 80,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: module.color.withOpacity(0.1),
+                  color: module.color.withValues(alpha: 0.1),
                 ),
               ),
             ),
@@ -313,7 +313,7 @@ class _ModuleCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: module.color.withOpacity(0.1),
+                      color: module.color.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                     ),
                     child: FaIcon(module.icon, color: module.color, size: 24),

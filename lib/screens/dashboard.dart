@@ -888,9 +888,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: color.withOpacity(0.4)),
+                border: Border.all(color: color.withValues(alpha: 0.4)),
               ),
-              child: Icon(icon, color: color.withOpacity(0.9), size: 20),
+              child: Icon(icon, color: color.withValues(alpha: 0.9), size: 20),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -910,7 +910,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     subtitle,
                     style: TextStyle(
                       fontSize: size.width * 0.032,
-                      color: Colors.white.withOpacity(0.6),
+                      color: Colors.white.withValues(alpha: 0.6),
                       fontWeight: FontWeight.w300,
                     ),
                   ),
@@ -920,7 +920,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Icon(
               Icons.arrow_forward_ios_rounded,
               size: 14,
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
             ),
           ],
         ),
@@ -936,7 +936,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         gradient: LinearGradient(
           colors: [
             Colors.transparent,
-            Colors.white.withOpacity(0.1),
+            Colors.white.withValues(alpha: 0.1),
             Colors.transparent,
           ],
         ),
