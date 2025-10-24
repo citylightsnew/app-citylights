@@ -27,13 +27,14 @@ class _DashboardRouterState extends State<DashboardRouter> {
 
   Future<void> _loadUserData() async {
     try {
-      if (widget.user != null) {
+      if (widget.user != null && widget.user!.role != null) {
+        // Si ya tenemos el usuario con rol, usarlo
         setState(() {
           _currentUser = widget.user;
           _isLoading = false;
         });
       } else {
-        // Cargar datos del usuario desde el AuthService o API
+        // Cargar datos completos del usuario desde el backend (incluyendo rol)
         final authService = AuthService();
         final user = await authService.getCurrentUser();
         setState(() {
@@ -52,21 +53,29 @@ class _DashboardRouterState extends State<DashboardRouter> {
   Widget _getDashboardByRole() {
     if (_currentUser == null || _currentUser!.role == null) {
       // Dashboard por defecto si no hay rol
+      debugPrint(
+        '⚠️ Usuario sin rol asignado, usando ResidentDashboard por defecto',
+      );
+      debugPrint('Usuario: ${_currentUser?.name ?? "null"}');
+      debugPrint('RoleId: ${_currentUser?.roleId ?? "null"}');
       return ResidentDashboard(userName: widget.userName, user: _currentUser);
     }
 
     final roleName = _currentUser!.role!.name.toLowerCase();
+    debugPrint('✅ Rol detectado: $roleName (ID: ${_currentUser!.role!.id})');
 
     switch (roleName) {
       case 'admin':
       case 'administrador':
       case 'administrator':
+        debugPrint('📊 Navegando a AdminDashboard');
         return AdminDashboard(userName: widget.userName, user: _currentUser!);
 
       case 'staff':
       case 'empleado':
       case 'personal':
       case 'employee':
+        debugPrint('🛠️ Navegando a StaffDashboard');
         return StaffDashboard(userName: widget.userName, user: _currentUser!);
 
       case 'resident':
@@ -74,6 +83,7 @@ class _DashboardRouterState extends State<DashboardRouter> {
       case 'user':
       case 'usuario':
       default:
+        debugPrint('🏠 Navegando a ResidentDashboard');
         return ResidentDashboard(userName: widget.userName, user: _currentUser);
     }
   }
